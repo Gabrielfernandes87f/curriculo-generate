@@ -28,11 +28,15 @@ class CurriculoController extends Controller
         $folder = 'curriculos';
         $relatorio = 'Gabriel1coder-curriculo';
         $pdfFile = $folder . '/' . $relatorio;
-        Storage::put('public/' . $pdfFile, $pdf->output());
 
-        // Retornar o PDF como resposta HTTP para forçar o download
-  
-       return response()->file(storage_path('app/public/' .$pdfFile));
+        try { 
+            Storage::put('public/' . $pdfFile, $pdf->output());
+            
+            // Retornar o PDF como resposta HTTP para forçar o download
+            return response()->file(storage_path('app/public/' .$pdfFile));
+            } catch (\Exception $e) {
+                return response('Erro ao gerar o PDF', 500);
+            } 
 
             /*            
             # baixar logo o curriculo sem abrir antes. 

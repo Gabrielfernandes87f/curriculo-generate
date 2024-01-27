@@ -16,6 +16,8 @@
         left: 50%;
         transform: translate(-50%, -50%);
         line-height: .50rem; 
+
+
     }
         .main > h1 {
             font-size: 18px;
@@ -31,6 +33,7 @@
             font-size: 18px;
             
           }
+
           .content >  .educacao > span , .expertise > span, .profissional > span, .projetos > span, .curso > span, .sobre > span, .idiomas > span {
             font-size: 14px;
             font-weight: none;

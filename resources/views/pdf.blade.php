@@ -7,46 +7,46 @@
         <p class="header"><a href="{{ $certification->website }}">{{ $certification->website }}</a></p>
         <p class="header">Email: {{ $certification->email }} </p>
         <p class="header">contato/whatsapp: {{ $certification->contact }} </p>
-        <p class="header">Localização:{{ $certification->location }}</p>
+        <p class="header">Localização: {{ $certification->location }}</p>
         <p class="header"><a href="Linkedin: {{ $certification->linkedin }}">{{ $certification->linkedin }}</a></p>
     </div>
     <div class="content">
 
-        <section class="expertise">
+        <div class="expertise">
             Expertise:<br/>  <span>{{ $certification->expertise }}</span> 
-        </section>
+        </div>
 
-        <section class="sobre">
+        <div class="sobre">
             Sobre: <br/> <span> {{ $certification->about }}</span> 
-        </section>
+        </div>
        
-        <section class="educacao">
+        <div class="educacao">
             Educação: <br/> <span>{{ $certification->education }}</span> 
-        </section>
+        </div>
         
-        <section class="curso">
+        <div class="curso">
             Curso:<br/>  <span>{{ $certification->course }}</span> <br/>
              <span class="curso-link"><a href="{{ $certification->course_link }}">{{ $certification->course_link }}</a></span>
-        </section>
+        </div>
         
-        <section class="idiomas">
+        <div class="idiomas">
             Idiomas:<br/>  <span>{{ $certification->languages }}</span>  
-        </section>
+        </div>
        
-        <section class="idiomas">
+        <div class="idiomas">
             Competências:<br/>  <span>{{ $certification->Skills }}</span>  
-        </section>
+        </div>
        
-        <section class="projetos">
+        <div class="projetos">
             Projetos:<br/><span>{{ $certification->project }}</span> 
             <span class="curso-link"> <a href="{{ $certification->projects_link }}">{{ $certification->projects_link }}</a></span>
 
-        </section>
+        </div>
 
-        <section class="profissional">
+        <div class="profissional">
             Experiência profissional:
-            <br/>
-
+            
+            <hr/>
                @foreach ($certification->professional as $profissional)
                <span >
                 
@@ -58,16 +58,21 @@
                     {{ $profissional->function }}
                 </div>
                 <div class="descricao">
-                    {!! nl2br(e($profissional->description)) !!}
+                    {!! nl2br(($profissional->description)) !!}
                 </div>
 
                 <div class="tecnologias">
-                    {{ $profissional->technology }}
+                    <span class="empresa">
+                        Tecnologias utilizadas: 
+                    </span>
+                     {{ $profissional->technology }}
                 </div>
+                @if (!$loop->last) 
                 <hr/>
+                  @endif
             </span>
             
             @endforeach
-        </section>
+        </div>
     </div>
 </div>

@@ -14,13 +14,11 @@ use App\Http\Controllers\CurriculoController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return redirect(route('filament.admin.auth.login'));
+})->name('home');
 
 Route::get('/login', function () {
     return redirect(route('filament.admin.auth.login'));
 })->name('login');
-
-
 
 Route::get('/download-pdf/{id}', [CurriculoController::class, 'downloadPdf'])->name('download-pdf');
