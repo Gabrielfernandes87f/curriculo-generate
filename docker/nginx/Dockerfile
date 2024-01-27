@@ -2,6 +2,9 @@ FROM ubuntu:22.04
 
 ARG NODE_VERSION=18
 
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
 
 WORKDIR /var/www/html
 
@@ -40,7 +43,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-  
+# Set up user and group
+RUN groupadd -g $uid -o $user \
+    && useradd -m -u $uid -g $uid -o -s /bin/bash $user
+
+# Allow www-data to run certain commands as the new user
+RUN echo "www-data ALL=(coder) NOPASSWD: /usr/local/bin/start-container" > /etc/sudoers.d/www-data
+
+# Set capabilities for PHP
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.2
 
 COPY . /var/www/html
@@ -48,21 +58,19 @@ COPY docker/nginx/start-container /usr/local/bin/start-container
 COPY docker/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/nginx/php.ini /etc/php/8.2/cli/conf.d/99-sail.ini
 COPY docker/nginx/nginx.conf /etc/nginx/sites-enabled/default
-RUN chmod +x /usr/local/bin/start-container
 
+# Adjust ownership and permissions
+RUN chown -R $user:$user /var/www/html \
+    && chown -R $user:$user /var/www/html/storage \
+    && chmod +x /usr/local/bin/start-container \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage/logs
 
-RUN chown -R www-data:www-data /var/www/html \
-&& chown -R www-data:www-data /var/www/html/storage \
-&& chmod +x /usr/local/bin/start-container \
-&& chmod -R 775 /var/www/html/storage \
-&& chmod -R 775 /var/www/html/storage/logs \
-&& chmod +x /usr/local/bin/start-container \
-&& chmod -R 775 /var/www/html/ 
-
+USER $user
 
 RUN composer install --optimize-autoloader \
-&& npm install  \
-&& npm run build
+    && npm install \
+    && npm run build
 
 EXPOSE 80
 
