@@ -5,9 +5,6 @@ services:
         build:
             context: ./
             dockerfile: ./docker/nginx/Dockerfile
-            args:
-                user: 'coder'
-                uid: 1000
         image: laravel_app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
