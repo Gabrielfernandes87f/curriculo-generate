@@ -45,12 +45,20 @@ COPY docker/nginx/start-container /usr/local/bin/start-container
 COPY docker/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/nginx/php.ini /etc/php/8.2/cli/conf.d/99-sail.ini
 COPY docker/nginx/nginx.conf /etc/nginx/sites-enabled/default
-RUN chmod +x /usr/local/bin/start-container
+
+
+
+RUN chmod +x /usr/local/bin/start-container \
+    && chown -R www-data:www-data /var/www/html/storage/* \
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage
+
 
 
 RUN composer install --optimize-autoloader \
 && npm install \
-&& npm run build 
+&& npm run build  
 
 EXPOSE 80
 
